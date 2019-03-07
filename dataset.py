@@ -21,7 +21,7 @@ def create_ref_target_generator(num_ref=3, num_target=1, ref_skip=4, target_skip
     def generate_frames():
         for key, entry in kinetics.iteritems():
             filename = os.path.join(video_dir, key+'.mp4')
-            print 'Opening %s' % filename
+            print ('Opening %s' % filename)
             cap = cv2.VideoCapture(filename)
             frames = np.zeros((num_ref+num_target,
                                int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)),
@@ -40,7 +40,7 @@ def create_ref_target_generator(num_ref=3, num_target=1, ref_skip=4, target_skip
                     else:
                         yield frames
                     batches += 1
-            print 'Extracted %d batches from %s' % (batches, filename)
+            print ('Extracted %d batches from %s' % (batches, filename))
     if num_target > 0:
         types = tf.float32, tf.float32
         shapes = tf.TensorShape([num_ref,None,None,3]), tf.TensorShape([num_target,None,None,3])
@@ -61,7 +61,7 @@ if __name__=='__main__':
     if not os.path.exists(kinetics_path):
         if not os.path.exists(kinetics_dir):
             os.mkdir(kinetics_dir)
-        print 'Downloading kinetics dataset.'
+        print ('Downloading kinetics dataset.')
         kinetics_url = 'https://deepmind.com/documents/193/kinetics_600_train%20(1).zip'
         kinetics_zip = os.path.join(data_dir, 'kinetics_train.zip')
         os.system('curl "%s" > %s' % (kinetics_url, kinetics_zip))
@@ -75,10 +75,10 @@ if __name__=='__main__':
         path1 = os.path.join(video_dir, '_'+key+'.mp4')
         path2 = os.path.join(video_dir, key+'.mp4')
         if os.path.exists(path2):
-            print 'Skipping existing video "%s".' % key
+            print ('Skipping existing video "%s".' % key)
         else:
           try:
-            print 'Downloading video "%s".' % key
+            print ('Downloading video "%s".' % key)
             command = ['youtube-dl',
                        '--quiet', '--no-warnings',
                        '-f', 'mp4',
@@ -94,4 +94,4 @@ if __name__=='__main__':
             os.system(' '.join(command))
             os.remove(path1)
           except:
-            print 'Error with video "%s". Skipping.' % key
+            print ('Error with video "%s". Skipping.' % key)
