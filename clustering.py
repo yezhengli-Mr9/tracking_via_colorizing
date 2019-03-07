@@ -128,4 +128,4 @@ if __name__=='__main__':
         x = tf.image.resize_images(x, [32,32])
         return tf.reshape(x[:,:,:,1:], [-1,2])
     kmeans.kmeans.train(lambda: create_batch_generator(1).map(preprocess))
-    print kmeans.cluster_centers()
+    print (kmeans.cluster_centers())
