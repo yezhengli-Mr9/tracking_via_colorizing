@@ -134,9 +134,13 @@ images = tf.image.resize_images(raw_images, IMAGE_SIZE)
 
 ##### create history
 if USE_HISTORY:
+    # history = PrioritizedHistory({'images': (images.get_shape().as_list(), tf.float32)},
+    #                              capacity=HISTORY_CAPACITY,
+    #                              device='/cpu:0')
+    #-------
+    #yezheng: tensorflow-gpu==1.4.1
     history = PrioritizedHistory({'images': (images.get_shape().as_list(), tf.float32)},
-                                 capacity=HISTORY_CAPACITY,
-                                 device='/cpu:0')
+                                 capacity=HISTORY_CAPACITY)
     append_op = history.append({'images': images}, INITIAL_WEIGHT)
     batch_inds, batch_data = history.sample(BATCH_SIZE)
     image_batch = tf.identity(batch_data['images'], name='images')
