@@ -189,11 +189,11 @@ latest_ckpt = tf.train.latest_checkpoint(MODEL_DIR)
 if USE_HISTORY:
     sess.run(history.initializer)
 if latest_ckpt is not None:
-    print 'Restoring from %s.' % latest_ckpt
+    print('Restoring from %s.' % latest_ckpt)
     saver.restore(sess, latest_ckpt)
     kmeans_initialized = True
 else:
-    print 'Starting with a new model.'
+    print('Starting with a new model.')
     kmeans_initialized = False
 
 ##### main loop
@@ -209,7 +209,7 @@ while True:
     
     if i >= MIN_HISTORY_SIZE and i % TRAIN_INTERVAL == 0:
         j = tf.train.global_step(sess, global_step)
-        print 'Train step', j
+        print('Train step', j)
         if not kmeans_initialized:
             sess.run(kmeans.init_op)
         

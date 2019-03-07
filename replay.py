@@ -170,9 +170,9 @@ if __name__=='__main__':
                                  capacity = 5,
                                  print_messages = True)
     def print_vars():
-        print 'inds:    ', history._inds.eval()
-        print 'values:  ', history._histories['__singleton__'].eval()[:,0]
-        print 'weights: ', history._weights.eval()
+        print( 'inds:    ', history._inds.eval())
+        print( 'values:  ', history._histories['__singleton__'].eval()[:,0])
+        print( 'weights: ', history._weights.eval())
     sess.run(history.initializer)
     print_vars()
     history.append([1], 1.).eval()
