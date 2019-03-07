@@ -63,6 +63,7 @@ class PrioritizedHistory:
             variables.append(self._size)
         
             self.saver = tf.train.Saver(var_list=variables)
+            print("v.initializer", v.initializer)
             self.initializer = tf.group(map(lambda v: v.initializer, variables))
 
     def append(self, name_to_value, weight):
