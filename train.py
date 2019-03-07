@@ -1,3 +1,4 @@
+#yezheng: tensorflow-gpu==1.4.1
 import tensorflow as tf
 import numpy as np
 import os
@@ -106,7 +107,7 @@ def _build_graph(image_batch):
     ##### calculate differences between reference and target images
     #[BATCH_SIZE,NUM_REF+NUM_TARGET,NUM_CLUSTERS]
     pq = tf.reduce_mean(tf.reduce_mean(tf.one_hot(labels, NUM_CLUSTERS), 2), 2)
-    q = tf.reduce_mean(pq[:,:NUM_REF,:], 1, keepdims=True)
+    q = tf.reduce_mean(pq[:,:NUM_REF,:], 1, keep_dims=True) ##yezheng: tensorflow-gpu==1.4.1
     p = pq[:,NUM_REF:,:]
     #upper bound of exp(-beta KL[p||q])
     #beta: LOSS_WEIGHTING_SHARPNESS; good approximation when 0.<b<=.5
