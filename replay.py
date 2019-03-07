@@ -61,10 +61,14 @@ class PrioritizedHistory:
                                      collections = variable_collections,
                                      name = 'size')
             variables.append(self._size)
-        
+    
             self.saver = tf.train.Saver(var_list=variables)
-            print("v.initializer", v.initializer)
-            self.initializer = tf.group(map(lambda v: v.initializer, variables))
+            # print("iter(map(lambda v: v.initializer, variables)", iter(map(lambda v: v.initializer, variables)))
+            # for v in map(lambda v: v.initializer, variables):
+            #     print(v)
+            #     print("----------")
+            # self.initializer = tf.group(map(lambda v: v.initializer, variables))
+            self.initializer = tf.group(map(lambda v: v.initializer, variables)[0])
 
     def append(self, name_to_value, weight):
         if not isinstance(name_to_value, dict):
