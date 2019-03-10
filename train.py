@@ -219,7 +219,7 @@ while True:
         if not kmeans_initialized:
             sess.run(kmeans.init_op)
         
-        if j % 10 == 0:
+        if 0 == j % 10:
             _, summary = sess.run([kmeans.train_op, kmeans_summary])
             writer.add_summary(summary, j)
         if j % 100 != 0:
