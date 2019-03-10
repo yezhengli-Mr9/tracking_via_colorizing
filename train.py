@@ -136,7 +136,7 @@ images = tf.image.resize_images(raw_images, IMAGE_SIZE)
 if USE_HISTORY:
     history = PrioritizedHistory({'images': (images.get_shape().as_list(), tf.float32)},
                                  capacity=HISTORY_CAPACITY,
-                                 device='/cpu:0')
+                                 device='/gpu:0')
     #-------
     #yezheng: tensorflow-gpu==1.4.1
     # history = PrioritizedHistory({'images': (images.get_shape().as_list(), tf.float32)},
