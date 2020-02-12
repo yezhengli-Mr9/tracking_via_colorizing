@@ -107,7 +107,11 @@ def _build_graph(image_batch):
     ##### calculate differences between reference and target images
     #[BATCH_SIZE,NUM_REF+NUM_TARGET,NUM_CLUSTERS]
     pq = tf.reduce_mean(tf.reduce_mean(tf.one_hot(labels, NUM_CLUSTERS), 2), 2)
+<<<<<<< HEAD
     q = tf.reduce_mean(pq[:,:NUM_REF,:], 1, keepdims=True) ##yezheng: tensorflow-gpu==1.4.1 'keep_dims'
+=======
+    q = tf.reduce_mean(pq[:,:NUM_REF,:], 1, keep_dims=True) ##yezheng: tensorflow-gpu==1.4.1 'keep_dims'
+>>>>>>> 7e6d9626a3f5ceeeacbdf302ee9f702a849c24b8
     p = pq[:,NUM_REF:,:]
     #upper bound of exp(-beta KL[p||q])
     #beta: LOSS_WEIGHTING_SHARPNESS; good approximation when 0.<b<=.5
@@ -136,7 +140,11 @@ images = tf.image.resize_images(raw_images, IMAGE_SIZE)
 if USE_HISTORY:
     history = PrioritizedHistory({'images': (images.get_shape().as_list(), tf.float32)},
                                  capacity=HISTORY_CAPACITY,
+<<<<<<< HEAD
                                  device='/cpu:0')
+=======
+                                 device='/gpu:0')
+>>>>>>> 7e6d9626a3f5ceeeacbdf302ee9f702a849c24b8
     #-------
     #yezheng: tensorflow-gpu==1.4.1
     # history = PrioritizedHistory({'images': (images.get_shape().as_list(), tf.float32)},
