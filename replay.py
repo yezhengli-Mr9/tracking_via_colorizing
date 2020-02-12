@@ -34,16 +34,16 @@ class PrioritizedHistory:
         if not isinstance(name_to_shape_dtype, dict):
             name_to_shape_dtype = {'__singleton__': name_to_shape_dtype}
         
-        with tf.device(self._device), tf.name_scope(self._scope):
+        with tf.device(self._device):#, tf.name_scope(self._scope):#yezheng
             self._histories = {}
-            with tf.name_scope('data'):
-                for name, (shape, dtype) in name_to_shape_dtype.iteritems():
-                    self._histories[name] = tf.Variable(tf.zeros([capacity]+list(shape), dtype=dtype),
-                                                        trainable = False,
-                                                        collections = variable_collections,
-                                                        name = name)
-                    variables.append(self._histories[name])
-        
+            #with tf.name_scope('data'):#yezheng
+            for name, (shape, dtype) in name_to_shape_dtype.iteritems():
+                self._histories[name] = tf.Variable(tf.zeros([capacity]+list(shape), dtype=dtype),
+                                                    trainable = False,
+                                                    collections = variable_collections,
+                                                    name = name)
+                variables.append(self._histories[name])
+    
             self._weights = tf.Variable(tf.zeros([capacity], dtype=tf.float32),
                                         trainable = False,
                                         collections = variable_collections,
@@ -61,16 +61,20 @@ class PrioritizedHistory:
                                      collections = variable_collections,
                                      name = 'size')
             variables.append(self._size)
-        
+    
             self.saver = tf.train.Saver(var_list=variables)
-            print("v.initializer", v.initializer)
-            self.initializer = tf.group(map(lambda v: v.initializer, variables))
+            # print("iter(map(lambda v: v.initializer, variables)", iter(map(lambda v: v.initializer, variables)))
+            # for v in map(lambda v: v.initializer, variables):
+            #     print(v)
+            #     print("----------")
+            # self.initializer = tf.group(map(lambda v: v.initializer, variables))
+            self.initializer = tf.group(map(lambda v: v.initializer, variables)[0])
 
     def append(self, name_to_value, weight):
         if not isinstance(name_to_value, dict):
             name_to_value = {'__singleton__': name_to_value}
         
-        with tf.device(self._device), tf.name_scope(self._scope):
+        with tf.device(self._device):#, tf.name_scope(self._scope):
             weight = tf.convert_to_tensor(weight)
             name_to_value = {name: tf.convert_to_tensor(value) for name, value in name_to_value.iteritems()}
             inds = tf.where(tf.less(self._weights, weight))
@@ -100,7 +104,7 @@ class PrioritizedHistory:
                 return tf.cond(accepted, insert, lambda: -1)
 
     def update_weight(self, ind, weight):
-        with tf.device(self._device), tf.name_scope(self._scope):
+        with tf.device(self._device):#, tf.name_scope(self._scope):
             ind = tf.convert_to_tensor(ind)
             if self._print_messages:
                 ind = tf.Print(ind, [ind], message='Updated entry: ')
@@ -137,7 +141,7 @@ class PrioritizedHistory:
                     return tf.identity(new_ind)
     
     def update_weights(self, inds, weights):
-        with tf.device(self._device), tf.name_scope(self._scope):
+        with tf.device(self._device):#, tf.name_scope(self._scope):
             inds = tf.convert_to_tensor(inds)
             if self._print_messages:
                 inds = tf.Print(inds, [inds], message='Updated entries: ')
@@ -152,7 +156,7 @@ class PrioritizedHistory:
             return tf.group(ops)
     
     def sample(self, size):
-        with tf.device(self._device), tf.name_scope(self._scope):
+        with tf.device(self._device):#, tf.name_scope(self._scope):
             inds = stratified_sample(self._weights[:self._size], size)
             if self._print_messages:
                 inds = tf.Print(inds, [inds], message='Sampled entries: ')
